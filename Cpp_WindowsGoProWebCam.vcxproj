@@ -22,8 +22,9 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{f8c4a6f9-aaaa-457f-9ac6-cc9ef3ea6357}</ProjectGuid>
-    <RootNamespace>CppWindowsGoProWebCam</RootNamespace>
+    <RootNamespace>CppWindowsGoProWebcam</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Cpp_WindowsGoProWebcam</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

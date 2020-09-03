@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cpp_WindowsGoProWebCam", "Cpp_WindowsGoProWebCam.vcxproj", "{F8C4A6F9-AAAA-457F-9AC6-CC9EF3EA6357}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cpp_WindowsGoProWebcam", "Cpp_WindowsGoProWebcam.vcxproj", "{F8C4A6F9-AAAA-457F-9AC6-CC9EF3EA6357}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
