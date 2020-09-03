@@ -130,11 +130,21 @@ int main(int argc, char* argv[])
 
                 //restart service requires admin
                 system("net stop \"GoPro Webcam Service\"");
+                Sleep(1000);
+
                 system("net start \"GoPro Webcam Service\"");
-                
+
+                Sleep(1000);
+
+                //change default mode from WIDE to NARROW
                 RequestGoProWebcamEndpoint(strGoProIP, "/gp/gpWebCam/STOP"); //STOP
                 RequestGoProWebcamEndpoint(strGoProIP, "/gp/gpControl/setting/43/6"); //MODE
                 RequestGoProWebcamEndpoint(strGoProIP, "/gp/gpWebcam/START"); //START
+
+                Sleep(500);
+
+                cout << "Ready to use Webcam!" << endl;
+                cout << "You may need to restart the GoPro application to detect the camera!" << endl;
             }
         }
         Sleep(1000);

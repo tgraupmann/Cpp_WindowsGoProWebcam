@@ -95,6 +95,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>packages\rmt_curl.7.51.0\build\native\lib\v140\Win32\$(Configuration)\static;packages\rmt_libssh2.1.8.0.0\build\native\lib\v140\Win32\$(Configuration)\static;packages\rmt_openssl.1.1.0.3\build\native\lib\v140\Win32\$(Configuration)\static;packages\rmt_zlib.1.2.8.7\build\native\lib\v140\Win32\$(Configuration)\static;packages\jsoncpp-vc140-static-32_64.1.8.0\lib\native\libs\x86\static\$(Configuration)</AdditionalLibraryDirectories>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -113,6 +114,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>packages\rmt_curl.7.51.0\build\native\lib\v140\Win32\$(Configuration)\static;packages\rmt_libssh2.1.8.0.0\build\native\lib\v140\Win32\$(Configuration)\static;packages\rmt_openssl.1.1.0.3\build\native\lib\v140\Win32\$(Configuration)\static;packages\rmt_zlib.1.2.8.7\build\native\lib\v140\Win32\$(Configuration)\static;packages\jsoncpp-vc140-static-32_64.1.8.0\lib\native\libs\x86\static\$(Configuration)</AdditionalLibraryDirectories>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -125,6 +127,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -141,6 +144,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
