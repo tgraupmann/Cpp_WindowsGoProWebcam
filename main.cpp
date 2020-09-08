@@ -4,13 +4,22 @@
 #define CURL_STATICLIB
 #include <curl.h>
 
+#include <conio.h>
 #include <iostream>
 #include <stdio.h>
 #include <string>
+#include <thread>
 #include <WinSock.h>
 
 
 using namespace std;
+
+static bool _sWaitForExit = true;
+static bool _sConnected = false;
+static bool _sRestartService = false;
+static bool _sChangeMode = true;
+static string _sStrGoProIP = "";
+static int _sMode = 2;
 
 int GetLastIndexOf(const string& str, const char c)
 {
@@ -83,13 +92,13 @@ size_t CurlWrite_CallbackFunc_StdString(void* contents, size_t size, size_t nmem
     return newLength;
 }
 
-void RequestGoProWebcamEndpoint(const string ip, const string path)
+void RequestGoProWebcamEndpoint(const string path)
 {
     curl_global_init(CURL_GLOBAL_DEFAULT);
     auto curl = curl_easy_init();
     if (curl) {
         string url = "http://";
-        url += ip;
+        url += _sStrGoProIP;
         url += path;
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
         curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1L);
@@ -110,43 +119,123 @@ void RequestGoProWebcamEndpoint(const string ip, const string path)
     }
 }
 
+void HandleInput()
+{
+    while (_sWaitForExit)
+    {
+        int input = _getch();
+        switch (input)
+        {
+        case 27:
+            _sWaitForExit = false;
+            break;
+        case 'M':
+        case 'm':
+            _sMode = (_sMode + 1) % 3;
+            _sChangeMode = true;
+            break;
+        case 'R':
+        case 'r':
+            _sRestartService = true;
+            break;
+        }
+        Sleep(0);
+    }
+}
+
+
+void PrintLegend()
+{
+    system("cls");
+    if (_sConnected)
+    {
+        cout << "GoPro WebCam " << _sStrGoProIP << " [Connected]" << endl;
+
+        cout << "Modes:" << endl;
+        cout << ((_sMode == 0) ? "[ * ]" : "[   ]") << " Wide" << endl;
+        cout << ((_sMode == 1) ? "[ * ]" : "[   ]") << " Large" << endl;
+        cout << ((_sMode == 2) ? "[ * ]" : "[   ]") << " Narrow" << endl;
+    }
+    else
+    {
+        printf("GoPro WebCam [Disconnected]\r\n");
+    }
+
+    cout << "Press `ESC` to quit." << endl;
+    cout << "Press `R` to restart GoPro Webcam Service." << endl;
+    cout << "Press `M` to toggle camera mode." << endl;
+
+    cout << endl;
+
+    cout << "Troubleshooting:" << endl;
+    cout << "  * Try restarting the camera." << endl;
+    cout << "  * Try reconnecting the USB camera cable." << endl;
+    cout << "  * Try checking the camera settings and make sure USB is in MTP mode." << endl;
+    cout << "  * You may need to restart the GoPro application to detect the camera." << endl;
+}
+
+void RestartGoProWebcamService()
+{
+    //restart service requires admin
+    system("net stop \"GoPro Webcam Service\"");
+    system("net start \"GoPro Webcam Service\"");
+}
+
 // ref - https://www.codeguru.com/csharp/csharp/cs_network/article.php/c6045/Obtain-all-IP-addresses-of-local-machine.htm
 int main(int argc, char* argv[])
 {
+    thread thread(HandleInput);
     string lastGoProIP = "";
-    while (true)
+    while (_sWaitForExit)
     {
-        string strGoProIP = GetGoProWebcam();
-        if (lastGoProIP.compare(strGoProIP) != 0)
+        if (_sRestartService)
         {
-            lastGoProIP = strGoProIP;
-            if (strGoProIP.empty())
-            {
-                printf("GoPro WebCam [Disconnected]\r\n");
-            }
-            else
-            {
-                printf("GoPro WebCam %s [Connected]\r\n", strGoProIP.c_str());
+            _sRestartService = false;
+            RestartGoProWebcamService();
+            Sleep(1000);
 
-                //change default mode from WIDE to NARROW
-                RequestGoProWebcamEndpoint(strGoProIP, "/gp/gpWebCam/STOP"); //STOP
-                RequestGoProWebcamEndpoint(strGoProIP, "/gp/gpControl/setting/43/6"); //MODE
-                RequestGoProWebcamEndpoint(strGoProIP, "/gp/gpWebcam/START"); //START
-
-                Sleep(500);
-
-                //restart service requires admin
-                system("net stop \"GoPro Webcam Service\"");
-                system("net start \"GoPro Webcam Service\"");
-
-                Sleep(1000);
-
-                cout << "Ready to use Webcam!" << endl;
-                cout << "You may need to restart the GoPro application to detect the camera!" << endl;
-            }
+            PrintLegend();
         }
+
+        _sStrGoProIP = GetGoProWebcam();
+        if (lastGoProIP.compare(_sStrGoProIP) != 0)
+        {
+            lastGoProIP = _sStrGoProIP;
+            _sChangeMode = true;
+            _sConnected = !_sStrGoProIP.empty();
+        }
+
+        if (_sConnected &&
+            _sChangeMode)
+        {
+            _sChangeMode = false;
+
+            //change default mode from WIDE to NARROW
+            RequestGoProWebcamEndpoint("/gp/gpWebCam/STOP"); //STOP
+            switch (_sMode)
+            {
+            case 0:
+                RequestGoProWebcamEndpoint("/gp/gpControl/setting/43/0"); //MODE
+                break;
+            case 1:
+                RequestGoProWebcamEndpoint("/gp/gpControl/setting/43/4"); //MODE
+                break;
+            case 2:
+                RequestGoProWebcamEndpoint("/gp/gpControl/setting/43/6"); //MODE
+                break;
+            }
+            RequestGoProWebcamEndpoint("/gp/gpWebcam/START"); //START
+
+            Sleep(500);
+
+            cout << "Ready to use Webcam!" << endl;
+        }
+
+        PrintLegend();
+
         Sleep(1000);
     }
+    thread.join();
     return 0;
 }
 
