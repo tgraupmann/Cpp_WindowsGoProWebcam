@@ -11,3 +11,7 @@ When the camera is connected, the app can auto switch between WIDE, LARGE, and N
 ## Release
 
 * You can find a Windows 32-bit installer in the [Release](https://github.com/tgraupmann/Cpp_WindowsGoProWebcam/releases/tag/1.0) section.
+
+## Support
+
+Contact `Tim Graupmann#0611` on Discord for support.
