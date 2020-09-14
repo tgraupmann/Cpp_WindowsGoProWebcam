@@ -126,12 +126,15 @@ void HandleInput()
         int input = _getch();
         switch (input)
         {
-        case 27:
+        case 27: //ESC
             _sWaitForExit = false;
             break;
         case 'M':
         case 'm':
             _sMode = (_sMode + 1) % 3;
+            _sChangeMode = true;
+            break;
+        case 13: //ENTER
             _sChangeMode = true;
             break;
         case 'R':
@@ -164,6 +167,7 @@ void PrintLegend()
     cout << "Press `ESC` to quit." << endl;
     cout << "Press `R` to restart GoPro Webcam Service." << endl;
     cout << "Press `M` to toggle camera mode." << endl;
+    cout << "Press `ENTER` to reset mode." << endl;
 
     cout << endl;
 
