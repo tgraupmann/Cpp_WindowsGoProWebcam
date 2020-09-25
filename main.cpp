@@ -17,6 +17,7 @@ using namespace std;
 static bool _sWaitForExit = true;
 static bool _sConnected = false;
 static bool _sRestartService = false;
+static bool _sPause = false;
 static bool _sChangeMode = true;
 static string _sStrGoProIP = "";
 static int _sMode = 2;
@@ -129,6 +130,10 @@ void HandleInput()
         case 27: //ESC
             _sWaitForExit = false;
             break;
+        case 'P':
+        case 'p':
+            _sPause = true;
+            break;
         case 'M':
         case 'm':
             _sMode = (_sMode + 1) % 3;
@@ -207,6 +212,13 @@ int main(int argc, char* argv[])
             lastGoProIP = _sStrGoProIP;
             _sChangeMode = true;
             _sConnected = !_sStrGoProIP.empty();
+        }
+
+        if (_sPause)
+        {
+            // pause capture
+            RequestGoProWebcamEndpoint("/gp/gpWebCam/STOP"); //STOP
+            _sPause = false;
         }
 
         if (_sConnected &&
