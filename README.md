@@ -4,6 +4,10 @@ GoProWebcamModeAutoSwitcher is a C++ Console App that detects when the GoPro 8 i
 
 When the camera is connected, the app can auto switch between WIDE, LARGE, and NARROW so the user doesn't have to do that manually.
 
+## Related
+
+* [How To Use Your GoPro As A Webcam](https://community.gopro.com/s/article/GoPro-Webcam?language=en_US)
+
 ## Screenshot
 
 ![image_1](images/image_1.png)
